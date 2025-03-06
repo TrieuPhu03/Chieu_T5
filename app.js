@@ -24,18 +24,18 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/products', require('./routes/products'));
 //
-mongoose.connect('mongodb://localhost:27017/C5');
-mongoose.connection.on('connected',function(){
+mongoose.connect('mongodb+srv://phunguyentrieu3:4VRoG14EiOhFwkXe@cluster0.j6tau.mongodb.net/C5');
+mongoose.connection.on('connected', function () {
   console.log("connected hehehe");
 })
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
