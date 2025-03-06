@@ -28,8 +28,6 @@ function buildQuery(obj) {
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
-
-
   let products = await productModel.find(buildQuery(req.query));
 
   res.status(200).send({
@@ -57,8 +55,10 @@ router.post('/', async function (req, res, next) {
   try {
     let newProduct = new productModel({
       name: req.body.name,
-      price: req.body.price,
-      quantity: req.body.quantity,
+      price: Number(req.body.price),
+      description: req.body.description,
+      quantity: Number(req.body.quantity),
+      imgURL: req.body.imgURL,
       category: req.body.category
     })
     await newProduct.save();
@@ -68,6 +68,33 @@ router.post('/', async function (req, res, next) {
     });
   } catch (error) {
     res.status(404).send({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+//update post
+router.put('/:id', async function (req, res, next) {
+  try {
+    let id = req.params.id;
+    let updateData = req.body;
+
+    let updatedProduct = await productModel.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!updatedProduct) {
+      return res.status(404).send({
+        success: false,
+        message: "Không tìm thấy sản phẩm để cập nhật"
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      data: updatedProduct
+    });
+  } catch (error) {
+    res.status(400).send({
       success: false,
       message: error.message
     });
